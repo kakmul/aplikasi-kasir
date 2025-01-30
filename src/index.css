@@ -1,11 +1,3 @@
 @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-
-    .bg-custom-blue {
-      background-color: rgb(7, 99, 235);
-    }
-
-    .text-custom-blue {
-      color: rgb(7, 99, 235);
-    }
+@tailwind components;
+@tailwind utilities;

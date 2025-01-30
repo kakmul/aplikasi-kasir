@@ -52,12 +52,21 @@ export default function Products() {
   });
 
   const handleAddToCart = (product: Product) => {
-    if (product.stock_quantity > 0) {
-      addItem(product, 1);
-      toast.success(`Added ${product.name} to cart`);
-    } else {
-      toast.error('Product out of stock');
+    // Check if product is out of stock
+    if (product.stock_quantity <= 0) {
+      toast.error('Product is out of stock');
+      return;
     }
+
+    // Check if adding one more would exceed stock
+    const currentInCart = items.find(item => item.product.id === product.id)?.quantity || 0;
+    if (currentInCart + 1 > product.stock_quantity) {
+      toast.error(`Cannot add more. Only ${product.stock_quantity} available in stock`);
+      return;
+    }
+
+    addItem(product, 1);
+    toast.success(`Added ${product.name} to cart`);
   };
 
   const handleScan = (sku: string) => {
@@ -136,7 +145,11 @@ export default function Products() {
     }
   };
 
-  const quickCashButtons = [2000, 5000, 10000, 20000, 50000, 100000];
+  const handleCashAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remove leading zeros and convert to number
+    const value = e.target.value.replace(/^0+/, '') || '0';
+    setCashAmount(Number(value));
+  };
 
   if (loading) {
     return (
@@ -189,7 +202,11 @@ export default function Products() {
             <div
               key={product.id}
               onClick={() => handleAddToCart(product)}
-              className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
+              className={`bg-white rounded-lg shadow-md p-4 transition-shadow ${
+                product.stock_quantity > 0 
+                  ? 'cursor-pointer hover:shadow-lg' 
+                  : 'opacity-50 cursor-not-allowed'
+              }`}
             >
               <img
                 src={product.image_url || `https://via.placeholder.com/200x200?text=${encodeURIComponent(product.name)}`}
@@ -200,8 +217,16 @@ export default function Products() {
               <p className="text-sm text-gray-500">SKU: {product.sku}</p>
               <div className="flex justify-between items-center mt-2">
                 <p className="font-bold text-gray-900">Rp. {product.price.toLocaleString()}</p>
-                <p className={`text-sm ${product.stock_quantity > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {product.stock_quantity} left
+                <p className={`text-sm ${
+                  product.stock_quantity > 10 
+                    ? 'text-green-600' 
+                    : product.stock_quantity > 0 
+                    ? 'text-yellow-600' 
+                    : 'text-red-600'
+                }`}>
+                  {product.stock_quantity === 0 
+                    ? 'Out of Stock' 
+                    : `${product.stock_quantity} left`}
                 </p>
               </div>
             </div>
@@ -266,11 +291,11 @@ export default function Products() {
           <input
             type="number"
             value={cashAmount}
-            onChange={(e) => setCashAmount(Number(e.target.value))}
+            onChange={handleCashAmountChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md"
           />
           <div className="grid grid-cols-3 gap-2 mt-2">
-            {quickCashButtons.map(amount => (
+            {[2000, 5000, 10000, 20000, 50000, 100000].map(amount => (
               <button
                 key={amount}
                 onClick={() => setCashAmount(prev => prev + amount)}
