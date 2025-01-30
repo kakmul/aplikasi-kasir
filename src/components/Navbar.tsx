@@ -16,7 +16,7 @@ import React from 'react';
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center space-x-8">
-                <Link to="/" className="text-xl font-bold text-white">POS System</Link>
+                <Link to="/" className="text-xl font-bold text-white">Aplikasi Kasir</Link>
                 <div className="hidden md:flex space-x-4">
                   <Link
                     to="/"
@@ -25,25 +25,25 @@ import React from 'react';
                     }`}
                   >
                     <Package size={18} className="text-white" />
-                    <span>Products</span>
+                    <span className="text-white">Products</span>
                   </Link>
                   <Link
                     to="/products/manage"
                     className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium ${
-                      location.pathname === '/products/manage' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100'
+                      location.pathname === '/products/manage' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-900'
                     }`}
                   >
                     <Settings size={18} className="text-white" />
-                    <span>Manage Products</span>
+                    <span className="text-white">Manage Products</span>
                   </Link>
                   <Link
                     to="/transactions"
                     className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium ${
-                      location.pathname === '/transactions' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100'
+                      location.pathname === '/transactions' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-900'
                     }`}
                   >
                     <Receipt size={18} className="text-white" />
-                    <span>Transactions</span>
+                    <span className="text-white">Transactions</span>
                   </Link>
                 </div>
               </div>
@@ -61,7 +61,7 @@ import React from 'react';
                 </Link>
                 <button
                   onClick={() => signOut()}
-                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-100"
+                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-900"
                 >
                   <LogOut size={18} className="text-white" />
                   <span>Logout</span>
